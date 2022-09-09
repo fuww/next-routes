@@ -1,4 +1,4 @@
-import pathToRegexp from 'path-to-regexp'
+import {pathToRegexp, compile} from 'path-to-regexp'
 import React from 'react'
 import {parse} from 'url'
 import NextLink from 'next/link'
@@ -125,7 +125,7 @@ class Route {
     this.page = page.replace(/(^|\/)index$/, '').replace(/^\/?/, '/')
     this.regex = pathToRegexp(this.pattern, this.keys = [])
     this.keyNames = this.keys.map(key => key.name)
-    this.toPath = pathToRegexp.compile(this.pattern)
+    this.toPath = compile(this.pattern)
   }
 
   match (path) {
@@ -153,13 +153,13 @@ class Route {
     const keys = Object.keys(params)
     const qsKeys = keys.filter(key => this.keyNames.indexOf(key) === -1)
 
-    if (!qsKeys.length) return as
+    if (!qsKeys.length) return encodeURI(as);
 
     const qsParams = qsKeys.reduce((qs, key) => Object.assign(qs, {
       [key]: params[key]
     }), {})
 
-    return `${as}?${toQuerystring(qsParams)}`
+    return encodeURI(`${as}?${toQuerystring(qsParams)}`)
   }
 
   getUrls (params) {
