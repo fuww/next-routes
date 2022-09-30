@@ -159,7 +159,7 @@ class Route {
       [key]: params[key]
     }), {})
 
-    return encodeURI(`${as}?${toQuerystring(qsParams)}`)
+    return `${encodeURI(as)}?${toQuerystring(qsParams)}`
   }
 
   getUrls (params) {
